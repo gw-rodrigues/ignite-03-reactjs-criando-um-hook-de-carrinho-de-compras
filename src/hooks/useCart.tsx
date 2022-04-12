@@ -22,19 +22,24 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
+  
   const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
-
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
+    //buscar dados localStorage
+    const storagedCart = localStorage.getItem('@RocketShoes:cart');
+    //verifica se existe valores
+    if (storagedCart) {
+       return JSON.parse(storagedCart);
+    }
 
     return [];
   });
 
+  //console.log(cart)
+
   const addProduct = async (productId: number) => {
     try {
-      // TODO
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(productId))
+      setCart([...cart, {id:productId,title:'teste',price:0,image:'teste',amount:2}])
     } catch {
       // TODO
     }
