@@ -49,8 +49,8 @@ const Home = (): JSX.Element => {
   /*
   console.log('product:')
   console.log(products) */
-  console.log('cart:')
-  console.log(cart)
+  /*console.log('cart:')
+  console.log(cart)*/
 
   function handleAddProduct(id: number) {
     addProduct(id)
