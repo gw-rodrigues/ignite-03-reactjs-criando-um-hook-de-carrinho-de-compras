@@ -24,7 +24,7 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   /* remove localStore data */
-  localStorage.removeItem('@RocketShoes:cart')
+  //localStorage.removeItem('@RocketShoes:cart')
 
   //buscar dados localStorage - verifica se existe valores - se nao retorna [vazio]
   const [cart, setCart] = useState<Product[]>(() => {
@@ -67,7 +67,14 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      const newCart = cart.filter((product) => { 
+        if (product.id !== productId) { 
+          return product 
+        } 
+      })
+      console.log(newCart)
+      setCart(newCart)
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart))
     } catch {
       // TODO
     }
@@ -83,7 +90,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         if (product.id === productId) { product.amount = amount } 
         return product
       })
-      console.log(newCart)
       setCart(newCart)
       localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart))
     } catch {
