@@ -1,7 +1,5 @@
-import { error } from 'console';
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
-import { ProductList } from '../pages/Home/styles';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
 
