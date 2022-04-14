@@ -54,9 +54,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }, 0)
       console.log('product exists?'); console.log(amount)
 
-      if (await hasProductInStock({ productId, amount: amount + 3 }) < 0) {
-        console.log('nao tem mais sctock')
-        return
+      if (!await hasProductInStock({ productId, amount: amount+1})) {
+        throw 'out-of-stock'
       }
 
       if (amount) {
@@ -67,10 +66,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       const product = await api.get(`/products/${productId}`).then((response) => response.data)
       product.amount = 1
       console.log('new product:'); console.log(product)
-      setCart([...cart, product])
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart))
+      setCart([product])
+      localStorage.setItem('@RocketShoes:cart',JSON.stringify([product]))
 
-    } catch {
+    } catch(error) {
+      console.log(error)
       toast.error('Erro na adição do produto');
     }
   };
@@ -88,10 +88,20 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      
+      cart.map((product)=>{
+        if(product.id === productId){
+          product.amount = amount
+        }
+        return product
+      })
+      console.log(cart)
+      //setCart(cart)
     } catch {
-      // TODO
+      toast.error('Erro na alteração de quantidade do produto');
     }
+    
+    localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart))
   };
 
   const hasProductInStock = async ({
@@ -102,14 +112,14 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       amount = await api.get(`/stock/${productId}`).then((response) => {
         console.log(`product need: ${amount} stock: ${response.data.amount}`)
-        return (response.data.amount) - amount
+        return (response.data.amount + 1) - amount
       })
     } catch {
       amount = -1
       toast.error('Erro ao verificar a quantidade do produto');
     }
     console.log(amount)
-    if (amount < 0) { toast.error('Quantidade solicitada fora de estoque'); }
+    if (amount<=0) { toast.error('Quantidade solicitada fora de estoque'); }
     return amount
   };
 
