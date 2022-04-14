@@ -24,7 +24,7 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   /* remove localStore data */
-  //localStorage.removeItem('@RocketShoes:cart')
+  localStorage.removeItem('@RocketShoes:cart')
 
   //buscar dados localStorage - verifica se existe valores - se nao retorna [vazio]
   const [cart, setCart] = useState<Product[]>(() => {
@@ -79,8 +79,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   }: UpdateProductAmount) => {
     if (!await hasProductInStock({ productId, amount })) { return }
     try {
-      cart.map((product) => { if (product.id === productId) { product.amount = amount } })
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart))
+      const newCart = cart.map((product) => { 
+        if (product.id === productId) { product.amount = amount } 
+        return product
+      })
+      console.log(newCart)
+      setCart(newCart)
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart))
     } catch {
       toast.error('Erro na alteração de quantidade do produto');
     }
