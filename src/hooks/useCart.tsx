@@ -35,12 +35,9 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     return [];
   });
 
-  console.log(`storagedCart:`)
-  console.log(cart)
-
-
   const addProduct = async (productId: number) => {
     try {
+      if(productId <= 0) { throw 'invalid value' }
       const amountInCart = cart.reduce((acc, product) => {
         if (product.id === productId) { acc = product.amount }
         return acc
@@ -49,11 +46,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       if (amountInCart) {
         updateProductAmount({ productId, amount: amountInCart + 1 })
       } else {
-        if (!await hasProductInStock({ productId, amount: 1 })) { return }
 
-        const product = await api.get(`/products/${productId}`)
+        const product = await api.get(`/products/50`)
         .then((response) => (response.data))
         product.amount = 1
+
+        if (!await hasProductInStock({ productId, amount: product.amount })) { return }
 
         const newCart = [...cart, product]
 
@@ -67,16 +65,16 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
+      if(productId <= 0) { throw 'invalid value' }
       const newCart = cart.filter((product) => { 
         if (product.id !== productId) { 
           return product 
         } 
       })
-      console.log(newCart)
       setCart(newCart)
       localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart))
     } catch {
-      // TODO
+      toast.error('Erro na remoção do produto');
     }
   };
 
@@ -84,8 +82,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     productId,
     amount,
   }: UpdateProductAmount) => {
-    if (!await hasProductInStock({ productId, amount })) { return }
     try {
+      if(amount <= 0 || productId <= 0) { throw 'invalid value' }
+      if (!await hasProductInStock({ productId, amount })) { return }
+
       const newCart = cart.map((product) => { 
         if (product.id === productId) { product.amount = amount } 
         return product
