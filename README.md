@@ -14,6 +14,4 @@ Essa será uma aplicação onde o seu principal objetivo é criar um hook de 
 
 A seguir veremos com mais detalhes o que e como precisa ser feito 🚀
 
-![desafio-03-01](https://user-images.githubusercontent.com/92688864/162839348-6deac6f7-7b01-4728-9e29-b28356c0796e.gif)
-
-![desafio-03-02](https://user-images.githubusercontent.com/92688864/162839355-163be283-d409-49c1-9398-c63d09f53fd5.gif)
+![desafio-03](https://user-images.githubusercontent.com/92688864/163578613-ed9f750b-dd1d-48fe-988f-256eb4dce27d.gif)
