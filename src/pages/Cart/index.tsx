@@ -17,10 +17,6 @@ interface Product {
   amount: number;
 }
 
-interface ProductStockExeced {
-  stock:number;
-}
-
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
